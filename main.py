@@ -23,8 +23,6 @@ bot = telebot.TeleBot(
 
 
 class Filters:
-    blabla = 123
-
     def is_user(message):
         return message.chat.id != config.get(
             'Tech',
