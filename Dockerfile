@@ -2,9 +2,7 @@ FROM alpine:3.8
 
 MAINTAINER Oskar Sharipov <oskar.sharipov@tuta.io>
 
-RUN apk add --no-cache \
-    python3 \
-    python3-dev
+RUN apk add --no-cache python3
 
 WORKDIR /app
 COPY . /app
