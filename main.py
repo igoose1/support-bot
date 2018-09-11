@@ -67,13 +67,17 @@ def send_help(message):
 
 @bot.message_handler(content_types=parsed_types, func=Filters.is_user)
 def get_question(message):
-    bot.send_message(
-        message.chat.id,
-        config.get(
-            'Messages',
-            'question-was-sent'
+    if config.getboolean(
+        'Tech',
+        'success-question-message'
+       ):
+        bot.send_message(
+            message.chat.id,
+            config.get(
+                'Messages',
+                'question-was-sent'
+                )
             )
-        )
     bot.forward_message(
         config.get(
             'Tech',
