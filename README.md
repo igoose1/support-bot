@@ -4,7 +4,7 @@ It forwards messages from subscribers to admin's chat and sends answers to user 
 
 ## Usage
 
-### Configurating
+### Configure
 
 Edit `config.ini` file to run the bot.
 
