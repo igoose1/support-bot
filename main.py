@@ -20,6 +20,16 @@ bot = telebot.TeleBot(
               'token'
               )
           )
+if config.getboolean(
+    'Tech',
+    'proxy'
+   ):
+    telebot.apihelper.proxy = {
+        'https': config.get(
+            'Tech',
+            'proxy-server'
+            )
+    }
 
 
 class Filters:
