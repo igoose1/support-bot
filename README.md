@@ -8,7 +8,7 @@ It forwards messages from subscribers to admin's chat and sends answers to user 
 
 Edit `config.ini` file to run the bot.
 
-Neccessary:
+Necessary:
   * `token` is your telegram bot's token.
   * `support-chat-id` is id of chat with admin(-s).
 
@@ -36,7 +36,7 @@ pipenv install -r requirements.txt  # install packages
 pipenv run python main.py  # run
 ```
 
-#### Standart
+#### Standard
 
 ```bash
 pip install -r requirements.txt  # install packages
