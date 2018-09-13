@@ -10,10 +10,24 @@ Edit `config.ini` file to run the bot.
 
 Necessary:
   * `token` is your telegram bot's token.
-  * `support-chat-id` is id of chat with admin(-s).
+  * `support-chat-id` is id of chat with admin(-s). If you want to use it alone write id of your account.
 
 All messages are editable.
 You can find them in config file too.
+
+#### Proxy
+
+You can use https proxy for bot.
+
+Change `proxy` to `yes` and write your address in `proxy-server`.
+```
+proxy-server: https://server_address:port
+```
+
+#### Receiving types
+
+You can filter user's files types.
+Write in `forward-types` variable all necessary types from telegram bot api.
 
 ### Running
 
