@@ -1,1 +1,5 @@
 pyTelegramBotAPI==3.6.6
+requests[socks]
+gunicorn
+PySocks
+urllib3
