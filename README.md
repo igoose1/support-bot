@@ -4,11 +4,11 @@ It forwards messages from subscribers to admin's chat and sends answers to user 
 
 Users ask something:
 
-![Users' view](pics/user_view.png)
+![Users' view](img/user_view.png)
 
 And admins answer:
 
-![Admins' view](pics/admin_view.png)
+![Admins' view](img/admin_view.png)
 
 ## Usage
 
