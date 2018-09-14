@@ -2,6 +2,14 @@
 Telegram bot that helps to admins to communicate with subscribers.
 It forwards messages from subscribers to admin's chat and sends answers to user from admins.
 
+Users ask something:
+
+![Users' view](pics/user_view.png)
+
+And admins answer:
+
+![Admins' view](pics/admin_view.png)
+
 ## Usage
 
 ### Configuration
