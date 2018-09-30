@@ -47,7 +47,11 @@ It's running in docker and installing packages using pipenv or pip.
 
 ```bash
 docker build -t support-bot .  # build
-docker run --rm support-bot  # run
+docker run \
+  -p 6379:6379 \  # or another ports that you use for redis
+  --network host \
+  --rm \
+  support-bot
 ```
 Dockerfile is existing in project folder.
 
