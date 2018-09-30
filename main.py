@@ -1,6 +1,7 @@
 import telebot
 import configparser
 import logging
+import redis
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -20,6 +21,16 @@ bot = telebot.TeleBot(
               'token'
               )
           )
+
+db = redis.StrictRedis(
+    host=config.get(
+        'Redis',
+        'host'),
+    port=config.getint(
+        'Redis',
+        'port')
+        )
+
 if config.getboolean(
     'Tech',
     'proxy'
@@ -50,7 +61,14 @@ class Filters:
             'Tech',
             'support-chat-id'
             ) and\
-            message.reply_to_message is not None
+            message.reply_to_message is not None and\
+            message.reply_to_message.forward_from is not None
+
+    def is_blocked(message):
+        return db.get(message.chat.id) is not None
+
+    def is_not_blocked(message):
+        return db.get(message.chat.id) is None
 
 
 @bot.message_handler(commands=['start'])
@@ -75,7 +93,8 @@ def send_help(message):
         )
 
 
-@bot.message_handler(content_types=parsed_types, func=Filters.is_user)
+@bot.message_handler(content_types=parsed_types, func=lambda msg:
+                     Filters.is_user(msg) and Filters.is_not_blocked(msg))
 def get_question(message):
     if config.getboolean(
         'Tech',
@@ -105,6 +124,39 @@ def get_error_question(message):
         config.get(
             'Messages',
             'question-wasnt-sent'
+            )
+        )
+
+
+@bot.message_handler(commands=['block'], func=Filters.is_answer)
+def block(message):
+    db.set(
+        message.reply_to_message.forward_from.id,
+        'True'
+        )
+    bot.send_message(
+        message.chat.id,
+        config.get(
+            'Messages',
+            'block-user'
+            ).format(
+                user_id=message.reply_to_message.forward_from.id
+            )
+        )
+
+
+@bot.message_handler(commands=['unblock'], func=Filters.is_answer)
+def block(message):
+    db.delete(
+        message.reply_to_message.forward_from.id
+        )
+    bot.send_message(
+        message.chat.id,
+        config.get(
+            'Messages',
+            'unblock-user'
+            ).format(
+                user_id=message.reply_to_message.forward_from.id
             )
         )
 

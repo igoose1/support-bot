@@ -3,3 +3,4 @@ requests[socks]
 gunicorn
 PySocks
 urllib3
+redis
