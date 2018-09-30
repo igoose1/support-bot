@@ -69,3 +69,12 @@ pip install -r requirements.txt  # install packages
 python main.py
 ```
 Be sure that you are using python3
+
+# Usage of bot
+
+Every messages from users **forward** to admin's chat.
+
+To answer admin has to **answer by replying question message**.
+
+To block user send **`/block` by replying** user's message you want to block.
+To unblock use **`/unblock`**.
