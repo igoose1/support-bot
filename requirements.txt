@@ -3,4 +3,4 @@ requests[socks]
 gunicorn
 PySocks
 urllib3
-redis
+peewee==3.13.*

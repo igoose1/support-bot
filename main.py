@@ -15,7 +15,9 @@
 import telebot
 import configparser
 import logging
-import redis
+from peewee import SqliteDatabase, Model, IntegerField
+from peewee import IntegrityError
+
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -36,14 +38,7 @@ bot = telebot.TeleBot(
               )
           )
 
-db = redis.StrictRedis(
-    host=config.get(
-        'Redis',
-        'host'),
-    port=config.getint(
-        'Redis',
-        'port')
-        )
+db = SqliteDatabase('db.sqlite3')
 
 if config.getboolean(
     'Tech',
@@ -55,6 +50,24 @@ if config.getboolean(
             'proxy-server'
             )
     }
+
+
+class Block(Model):
+    user_id = IntegerField(unique=True)
+
+    class Meta:
+        database = db
+
+
+class Message(Model):
+    from_ = IntegerField()
+    id = IntegerField(unique=True)
+
+    class Meta:
+        database = db
+
+
+db.create_tables([Block, Message])
 
 
 class Filters:
@@ -76,13 +89,14 @@ class Filters:
             'support-chat-id'
             ) and\
             message.reply_to_message is not None and\
-            message.reply_to_message.forward_from is not None
+            message.reply_to_message.forward_date is not None
 
     def is_blocked(message):
-        return db.get(message.chat.id) is not None
+        return Block.select().where(Block.user_id == message.chat.id).exists()
 
     def is_not_blocked(message):
-        return db.get(message.chat.id) is None
+        return not\
+            Block.select().where(Block.user_id == message.chat.id).exists()
 
 
 @bot.message_handler(commands=['start'])
@@ -121,7 +135,7 @@ def get_question(message):
                 'question-was-sent'
                 )
             )
-    bot.forward_message(
+    sent = bot.forward_message(
         config.get(
             'Tech',
             'support-chat-id'
@@ -129,6 +143,7 @@ def get_question(message):
         message.chat.id,
         message.message_id
         )
+    Message.create(from_=message.chat.id, id=sent.message_id).save()
 
 
 @bot.message_handler(func=Filters.is_user)
@@ -144,48 +159,60 @@ def get_error_question(message):
 
 @bot.message_handler(commands=['block'], func=Filters.is_answer)
 def block(message):
-    db.set(
-        message.reply_to_message.forward_from.id,
-        'True'
-        )
+    user_id = Message.select().where(
+        Message.id == message.reply_to_message.message_id
+    ).get().from_
+    try:
+        Block.create(user_id=user_id).save()
+    except IntegrityError:
+        pass
+
     bot.send_message(
         message.chat.id,
         config.get(
             'Messages',
             'block-user'
             ).format(
-                user_id=message.reply_to_message.forward_from.id
+                user_id=user_id
             )
         )
 
 
 @bot.message_handler(commands=['unblock'], func=Filters.is_answer)
-def block(message):
-    db.delete(
-        message.reply_to_message.forward_from.id
-        )
+def unblock(message):
+    user_id = Message.select().where(
+        Message.id == message.reply_to_message.message_id
+    ).get().from_
+    try:
+        Block.select().where(user_id == user_id).get().delete_instance()
+    except Block.DoesNotExist:
+        pass
+
     bot.send_message(
         message.chat.id,
         config.get(
             'Messages',
             'unblock-user'
             ).format(
-                user_id=message.reply_to_message.forward_from.id
+                user_id=user_id
             )
         )
 
 
 @bot.message_handler(content_types=['text', 'photo'], func=Filters.is_answer)
 def answer_question(message):
+    to_user_id = Message.select().where(
+        Message.id == message.reply_to_message.message_id
+    ).get().from_
     if message.photo is not None:
         bot.send_photo(
-            message.reply_to_message.forward_from.id,
+            to_user_id,
             message.photo[-1].file_id,
             message.caption,
             )
     else:
         bot.send_message(
-            message.reply_to_message.forward_from.id,
+            to_user_id,
             config.get(
                 'Messages',
                 'get-answer'

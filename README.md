@@ -39,31 +39,6 @@ Write in `forward-types` variable all necessary types from telegram bot api.
 
 ### Running
 
-There are many ways to run the bot.
-
-It's running in docker and installing packages using pipenv or pip.
-
-#### Docker
-
-```bash
-docker build -t support-bot .  # build
-docker run \
-  -p 6379:6379 \  # or another ports that you use for redis
-  --network host \
-  --rm \
-  support-bot
-```
-Dockerfile is existing in project folder.
-
-#### Pipenv
-
-```bash
-pipenv install -r requirements.txt  # install packages
-pipenv run python main.py  # run
-```
-
-#### Standard
-
 ```bash
 pip install -r requirements.txt  # install packages
 python main.py
