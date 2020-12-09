@@ -43,7 +43,7 @@ Write in `forward-types` variable all necessary types from telegram bot api.
 pip install -r requirements.txt  # install packages
 python main.py
 ```
-Be sure that you are using python3
+Be sure that you are using python3.
 
 # Usage of bot
 
