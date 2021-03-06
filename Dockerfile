@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-MAINTAINER Oskar Sharipov <oskar.sharipov@tuta.io>
+MAINTAINER Oskar Sharipov <oskarsh[at]riseup[dot]net>
 
 RUN apk add --no-cache python3
 
