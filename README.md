@@ -2,7 +2,7 @@
 Telegram bot that helps to admins to communicate with subscribers.
 It forwards messages from subscribers to admin's chat and sends answers to user from admins.
 
-Users' chat:
+User's chat:
 
 ![Users' view](img/user_view.png)
 
@@ -14,14 +14,13 @@ Admins' chat:
 
 ### Configuration
 
-Edit `config.ini` file to run the bot.
+Edit `config.ini` file before running the bot.
 
 Necessary:
   * `token` is your telegram bot's token.
-  * `support-chat-id` is id of chat with admin(-s). If you want to use it alone write id of your account.
+  * `support-chat-id` is id of chat with admin(-s). If you want to use it in private chat write id of your account.
 
-All messages are editable.
-You can find them in config file too.
+All messages are editable, you can find them in config file too.
 
 #### Proxy
 
@@ -35,21 +34,21 @@ proxy-server: https://server_address:port
 #### Receiving types
 
 You can filter user's files types.
-Write in `forward-types` variable all necessary types from telegram bot api.
+Write in `forward-types` necessary types from telegram bot API.
 
 ### Running
 
-```bash
-pip install -r requirements.txt  # install packages
+```
+pip install -r requirements.txt  # installs deps
+
 python main.py
 ```
-Be sure that you are using python3.
 
 # Usage of bot
 
-Every messages from users **forward** to admin's chat.
+Every message from users **forwards** to admin's chat.
 
-To answer admin has to **answer by replying question message**.
+Admin answers by **replying to the message with a question**.
 
-To block user send **`/block` by replying** user's message you want to block.
-To unblock use **`/unblock`**.
+User can be blocked by **`/block`** in reply. Unblocking is possible as well
+with **`/unblock`**.
