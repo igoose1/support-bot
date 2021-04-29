@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import telebot
 import configparser
 import logging
-from peewee import SqliteDatabase, Model, IntegerField
-from peewee import IntegrityError
 
+import telebot
+from peewee import IntegerField, IntegrityError, Model, SqliteDatabase
 
 config = configparser.ConfigParser()
 config.read("config.ini")
