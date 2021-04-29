@@ -128,7 +128,7 @@ def unblock(message):
         .from_
     )
     try:
-        Block.select().where(user_id == user_id).get().delete_instance()
+        Block.select().where(Block.user_id == user_id).get().delete_instance()
     except Block.DoesNotExist:
         pass
 
